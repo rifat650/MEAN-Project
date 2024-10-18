@@ -1,0 +1,20 @@
+<mat-card>
+   <form (ngSubmit)="onAddPost(postForm)" #postForm="ngForm">
+      <mat-form-field>
+         <input matInput type="text" name="title" ngModel required placeholder="Enter Title" #title="ngModel">
+
+         @if (title.invalid) {
+         <mat-error>please add title</mat-error>
+         }
+
+      </mat-form-field>
+      <mat-form-field>
+         <textarea matInput ngModel name="description" required #description="ngModel" placeholder="Enter Description"></textarea>
+
+         @if (description.invalid) {
+         <mat-error>please add title</mat-error>
+         }
+      </mat-form-field>
+      <button mat-raised-button style="background-color: rgb(19, 119, 19); color: #fff;">save post</button>
+   </form>
+</mat-card>

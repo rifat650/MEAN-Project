@@ -1,0 +1,10 @@
+mat-form-field,textarea{
+   width: 100%;
+}
+button{
+   width: 10rem;
+   text-transform: capitalize;
+}
+mat-card{
+   padding: 3rem 1.5rem;
+}
