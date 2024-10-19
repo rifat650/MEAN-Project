@@ -7,10 +7,8 @@ import { map, Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class PostsService {
-
   constructor() { }
   http = inject(HttpClient);
-
   getPosts(): Observable<any[]> {
     // Return the observable directly
     return this.http.get<any[]>('http://127.0.0.1:3000/api/posts').pipe(map((postsdata) => {
@@ -23,18 +21,20 @@ export class PostsService {
       })
     }));
   }
-
   addPost(title: string, description: string) {
     const post: Post = {
       title: title,
       description: description
     };
-    // Push to local array or make a POST request to the server to add
     return this.http.post('http://127.0.0.1:3000/api/posts', post)
   }
 
 
-  deletePost(postId:string|undefined){
+  deletePost(postId: string | undefined) {
     return this.http.delete(`http://127.0.0.1:3000/api/posts/${postId}`)
+  }
+  updatePost(postId: string, data: object) {
+    return this.http.put(`http://127.0.0.1:3000/api/posts/${postId}`, data);
+
   }
 }

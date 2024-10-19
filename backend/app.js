@@ -20,15 +20,35 @@ app.use(cors({
    allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
+const deletePost = (req, res) => {
+   Post.deleteOne({ _id: req.params.id }).then((result) => {
+      res.status(200).json({
+         mesage: 'post deleted succcessfully'
+      })
+   })
 
-app.get('/api/posts', (req, res) => {
+}
+const updatePost = (req, res) => {
+   const post = new Post({
+      _id: req.params.id,
+      title: req.body.title,
+      description: req.body.description,
+
+   })
+
+   Post.updateOne({ _id: req.params.id }, post).then((result) => {
+      console.log(result);
+      res.json({ massage: 'update Successful!' })
+   })
+
+}
+const getAllPosts = (req, res) => {
    Post.find().then((documents) => {
       res.status(200).json(documents)
    })
 
-})
-
-app.post('/api/posts', (req, res) => {
+}
+const createNewPost = (req, res) => {
    const post = new Post({
       title: req.body.title,
       description: req.body.description
@@ -46,14 +66,8 @@ app.post('/api/posts', (req, res) => {
             message: 'Error saving post'
          });
       });
-});
+}
+app.route('/api/posts/:id').delete(deletePost).put(updatePost);
+app.route('/api/posts').get(getAllPosts).post(createNewPost);
 
-app.delete('/api/posts/:id', (req, res) => {
-   Post.deleteOne({ _id: req.params.id }).then((result) => {
-      res.status(200).json({
-         mesage: 'post deleted succcessfully'
-      })
-   })
-
-})
 module.exports = app;

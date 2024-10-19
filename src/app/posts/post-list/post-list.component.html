@@ -7,7 +7,7 @@
          </mat-expansion-panel-header>
          <p>{{post.description}}</p>
          <mat-action-row>
-            <button mat-button style="background-color: rgb(3, 86, 219); color: #fff;">EDIT &nbsp;<i class="fa-solid fa-pen-to-square"></i>
+            <button mat-button style="background-color: rgb(3, 86, 219); color: #fff;" (click)="onEdit(post)">EDIT &nbsp;<i class="fa-solid fa-pen-to-square"></i>
             </button>
             <button mat-button style="background-color: rgb(203, 13, 10); color: #fff;" (click)="onDelete(post)">DELETE &nbsp;<i class="fa-solid fa-trash"></i></button>
          </mat-action-row>
@@ -16,4 +16,7 @@
 </div>
 }@empty {
    <p style="text-align: center;">No Post Added Yet</p>
+}
+@if (EditingModeOn) {
+   <app-post-edit (CancleBtnclicked)="hideEditPopup()" [titleFeildValue]="postTitle" [descriptionFeildValue]="postDescription" [postId]="postID" (getUpdatedPost)="fetchingUpdatedPost($event)" ></app-post-edit>
 }
