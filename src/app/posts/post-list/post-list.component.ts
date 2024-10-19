@@ -11,10 +11,9 @@ import { PostsService } from '../../posts.service';
   styleUrl: './post-list.component.css'
 })
 export class PostListComponent implements OnInit {
-posts:Post[]=[];
-  postService=inject(PostsService);
-
-  ngOnInit() {
+  posts: Post[] = [];
+  postService = inject(PostsService);
+  fetchPosts() {
     this.postService.getPosts().subscribe({
       next: (posts: Post[]) => {
         this.posts = posts;
@@ -24,4 +23,21 @@ posts:Post[]=[];
       }
     });
   }
+  ngOnInit() {
+    this.fetchPosts()
+  }
+  onPostAdded() {
+    this.fetchPosts();
+  }
+
+  onDelete(post: Post) {
+    const id: string | undefined = post.id;
+    this.postService.deletePost(id).subscribe({
+      next: (value) => {
+        this.fetchPosts();
+      }
+    })
+
+  }
+
 }

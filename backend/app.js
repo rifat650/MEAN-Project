@@ -1,11 +1,18 @@
-const express=require('express');
-const app=express();
-const cors=require('cors');
-const bodyParser=require('body-parser');
+const mongoose = require('mongoose');
+mongoose.connect('mongodb+srv://darcygravan:k97oB8oseO3lhj1A@cluster0.kcyuj.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0')
+   .then(() => console.log('connected to data base'))
+   .catch((error) => console.log('connection faild', error))
+
+const express = require('express');
+const app = express();
+const Post = require('./post')
+const cors = require('cors');
+const bodyParser = require('body-parser');
+
 app.use(bodyParser.json())
 app.use(cors());
 app.use(cors({
-   origin: 'http://localhost:4200' 
+   origin: 'http://localhost:4200'
 }));
 app.use(cors({
    origin: 'http://localhost:4200',
@@ -14,31 +21,39 @@ app.use(cors({
 }));
 
 
-app.get('/api/posts',(req,res)=>{
-   const posts = [
-      {
-         id: 1,
-         title: "Learn Angular",
-         description: "A beginner-friendly guide to learning Angular and building web applications."
-      },
-      {
-         id: 2,
-         title: "Master Node.js",
-         description: "Comprehensive tutorial on building server-side applications with Node.js."
-      },
-      {
-         id: 3,
-         title: "Explore C++",
-         description: "An in-depth guide to learning C++, from basics to advanced concepts."
-      }
-   ];
-   res.status(200).json(posts)
+app.get('/api/posts', (req, res) => {
+   Post.find().then((documents) => {
+      res.status(200).json(documents)
+   })
+
 })
-app.post('/api/posts',(req,res)=>{
-const post=req.body;
-console.log(post);
-res.status(201).json({
-   massage:'post added successfully'
+
+app.post('/api/posts', (req, res) => {
+   const post = new Post({
+      title: req.body.title,
+      description: req.body.description
+   });
+
+   post.save()
+      .then(() => {
+         res.status(201).json({
+            message: 'post added successfully'
+         });
+      })
+      .catch((error) => {
+         console.error('Error saving post:', error);
+         res.status(500).json({
+            message: 'Error saving post'
+         });
+      });
+});
+
+app.delete('/api/posts/:id', (req, res) => {
+   Post.deleteOne({ _id: req.params.id }).then((result) => {
+      res.status(200).json({
+         mesage: 'post deleted succcessfully'
+      })
+   })
+
 })
-})
-module.exports=app;
+module.exports = app;

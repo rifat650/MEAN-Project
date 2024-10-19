@@ -13,8 +13,8 @@ import { Post } from './post.model';
 })
 export class AppComponent {
 
-  posts: Post[] = [];
-  onPostAdded(data: Post) {
-    this.posts.push(data);
-  }
+  // posts: Post[] = [];
+  // onPostAdded(data: Post) {
+  //   this.posts.push(data);
+  // }
 }

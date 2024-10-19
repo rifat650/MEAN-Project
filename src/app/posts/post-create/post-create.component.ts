@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, EventEmitter, inject, Output } from '@angular/core';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatCardModule } from '@angular/material/card';
@@ -17,8 +17,17 @@ export class PostCreateComponent {
   postService=inject(PostsService);
   enteredTitle = "";
   enteredContent = "";
+  @Output() postAdded = new EventEmitter<void>();
   onAddPost(postForm:NgForm) {
-    this.postService.addPost(postForm.value.title, postForm.value.description);
-    postForm.resetForm()
+    this.postService.addPost(postForm.value.title, postForm.value.description).subscribe({
+      next:(value)=> {
+        this.postAdded.emit()
+        postForm.resetForm();
+      },
+      error:(error)=> {
+        console.error('Error adding post:', error);
+      }
+    });
   }
+
 }
