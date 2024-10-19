@@ -12,10 +12,16 @@ import { PostsService } from '../../posts.service';
 })
 export class PostListComponent implements OnInit {
 posts:Post[]=[];
-
   postService=inject(PostsService);
 
-  ngOnInit(){
-this.posts=this.postService.getPosts()
+  ngOnInit() {
+    this.postService.getPosts().subscribe({
+      next: (posts: Post[]) => {
+        this.posts = posts;
+      },
+      error: (error) => {
+        console.error('Error fetching posts:', error);
+      }
+    });
   }
 }
