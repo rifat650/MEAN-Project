@@ -1,29 +1,41 @@
 <div class="popup-container">
    <div class="popup-card">
       <h2>Edit Post</h2>
-      <form (ngSubmit)="onSubmit(form)" #form ngForm>
+      <form (ngSubmit)="updatePost()" [formGroup]="reactiveForm">
+
          <div class="form-field">
-            <label for="title">Title</label>
-            <input type="text" id="title" placeholder="Enter Title" required [(ngModel)]="titleFeildValue"
-               #title="ngModel" name="title" ngModel>
-            @if (title.invalid && title.touched) {
+            <label>Title
+               <input placeholder="Enter Title" formControlName="title">
+            </label>
+            @if (reactiveForm.get('title').invalid) {
             <span class="error-message">Please add a title</span>
             }
-
          </div>
+
+         <div class="form-feild">
+            <button (click)="fileUpload.click()" class="upload-pic">select new photo</button>
+            @if (imagepathValue) {
+               <p>choosen image:</p>
+               <img [src]="imagepathValue" width="250px">
+            }
+            <input type="file" #fileUpload style="display: none;" (change)="newimageAdded($event)">
+         </div>
+
          <div class="form-field">
-            <label for="description">Description</label>
-            <textarea id="description" placeholder="Enter Description" required [(ngModel)]="descriptionFeildValue"
-               #description="ngModel" name="description" ngModel>
+            <label>Description
+               <textarea placeholder="Enter Description" formControlName="description">
             </textarea>
-            @if (description.invalid && description.touched) {
+            </label>
+            @if (reactiveForm.get('description').invalid) {
             <span class="error-message">Please add a description</span>
             }
          </div>
+
          <div class="button-container">
-               <button class="save-button" (click)="updatePost(title.value,description.value)">Update Post</button>
+            <button class="save-button" type="submit">Update Post</button>
             <button type="button" class="cancel-button" (click)="cancleClicked()">Cancel</button>
          </div>
+
       </form>
    </div>
 </div>

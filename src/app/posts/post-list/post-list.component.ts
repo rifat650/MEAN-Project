@@ -1,9 +1,8 @@
-import { Component, inject, Input, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { Post } from '../../post.model';
 import { MatButtonModule } from '@angular/material/button';
 import { PostsService } from '../../posts.service';
-import { EventTransferService } from '../../event-transfer.service';
 import { PostEditComponent } from "../post-edit/post-edit.component";
 @Component({
   selector: 'app-post-list',
@@ -15,8 +14,10 @@ import { PostEditComponent } from "../post-edit/post-edit.component";
 export class PostListComponent implements OnInit {
   posts: Post[] = [];
   postService = inject(PostsService);
-  EventTransferService = inject(EventTransferService);
   EditingModeOn = false;
+  editModeRevert() {
+    this.EditingModeOn = !this.EditingModeOn
+  }
   fetchPosts() {
     this.postService.getPosts().subscribe({
       next: (posts: Post[]) => {
@@ -27,12 +28,8 @@ export class PostListComponent implements OnInit {
       }
     });
   }
-
   ngOnInit() {
     this.fetchPosts()
-  }
-  onPostAdded() {
-    this.fetchPosts();
   }
 
   onDelete(post: Post) {
@@ -47,17 +44,19 @@ export class PostListComponent implements OnInit {
   postTitle = '';
   postDescription = '';
   postID: any = '';
+  imagePath = ''
   onEdit(post: Post) {
-    this.EditingModeOn = !this.EditingModeOn;
+    this.editModeRevert()
     this.postTitle = post.title;
     this.postDescription = post.description;
     this.postID = post.id;
+    this.imagePath = post.imagePath;
   }
   hideEditPopup() {
-    this.EditingModeOn = !this.EditingModeOn
+    this.editModeRevert()
   }
   fetchingUpdatedPost(postValue: Post[]) {
     this.posts = postValue;
-    this.EditingModeOn = !this.EditingModeOn;
+    this.editModeRevert()
   }
 }

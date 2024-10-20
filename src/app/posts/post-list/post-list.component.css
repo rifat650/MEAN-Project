@@ -4,3 +4,11 @@ div{
 button{
    width: 6rem;
 }
+.img-preview{
+   width: 400px;
+   margin: 1rem auto;
+}
+.img-preview img{
+   width: 100%;
+   object-fit: contain;
+}

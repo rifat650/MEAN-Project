@@ -1,20 +1,30 @@
 <mat-card>
-   <form (ngSubmit)="onAddPost(postForm)" #postForm="ngForm">
+   <form [formGroup]="reactiveForm" (ngSubmit)="onAddPost()">
       <mat-form-field>
-         <input matInput type="text" name="title" ngModel required placeholder="Enter Title" #title="ngModel">
+         <input matInput type="text" placeholder="Enter Title" formControlName="title">
 
-         @if (title.invalid) {
+         @if (reactiveForm.get('title').invalid ) {
          <mat-error>please add title</mat-error>
          }
 
       </mat-form-field>
-      <mat-form-field>
-         <textarea matInput ngModel name="description" required #description="ngModel" placeholder="Enter Description"></textarea>
 
-         @if (description.invalid) {
-         <mat-error>please add title</mat-error>
+      <button type="button" (click)="fileInput.click()">Upload Image</button>
+      <input type="file" #fileInput style="display: none;" (change)="onImageChanged($event)" accept="image/*">
+
+      @if (imagePreview!=="" && imagePreview && reactiveForm.get('image').valid) {
+      <div class="img-preview">
+         <img [src]="imagePreview" [alt]="reactiveForm.get('title').value">
+      </div>
+      }
+
+      <mat-form-field>
+         <textarea matInput placeholder="Enter Description" formControlName="description"></textarea>
+
+         @if (reactiveForm.get('description').invalid) {
+         <mat-error>please add description</mat-error>
          }
       </mat-form-field>
-      <button mat-raised-button style="background-color: rgb(19, 119, 19); color: #fff;">save post</button>
+      <button mat-raised-button type="submit">save post</button>
    </form>
 </mat-card>

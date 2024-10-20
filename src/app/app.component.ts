@@ -12,9 +12,4 @@ import { Post } from './post.model';
   styleUrl: './app.component.css'
 })
 export class AppComponent {
-
-  // posts: Post[] = [];
-  // onPostAdded(data: Post) {
-  //   this.posts.push(data);
-  // }
 }

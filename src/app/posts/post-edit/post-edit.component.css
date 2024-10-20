@@ -44,6 +44,8 @@ h2{
    border-radius: 4px;
    font-size: 16px;
    transition: border-color 0.3s;
+   resize: none;
+   font-family: sans-serif;
 }
 
 .form-field input:focus,
@@ -79,4 +81,7 @@ button {
 
 .cancel-button {
    background-color: #f44336;
+}
+.upload-pic{
+   background: #001972;
 }

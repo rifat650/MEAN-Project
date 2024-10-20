@@ -1,10 +1,37 @@
-mat-form-field,textarea{
+mat-form-field,
+textarea {
    width: 100%;
 }
-button{
+
+button {
    width: 10rem;
    text-transform: capitalize;
 }
-mat-card{
+
+mat-card {
    padding: 3rem 1.5rem;
+}
+
+button[type="button"] {
+   border: none;
+   background: #181717;
+   padding: 1rem 2rem;
+   color: aliceblue;
+   font-size: medium;
+   width: auto;
+   border-radius: 1rem;
+   margin: 20px 10px;
+}
+
+button[type="submit"] {
+   background-color: rgb(19, 119, 19);
+   color: #fff;
+   margin-top: 1rem;
+}
+.img-preview{
+   height: 10rem;
+   margin: 1rem 0;
+}
+.img-preview img{
+   height: 100%;
 }
