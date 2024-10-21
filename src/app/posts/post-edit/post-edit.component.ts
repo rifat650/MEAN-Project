@@ -2,6 +2,7 @@ import { Component, EventEmitter, inject, Input, Output, OnChanges } from '@angu
 import { PostUtilityService } from './../post-utility.service';
 import { PostsService } from '../../posts.service';
 import { ReactiveFormsModule } from '@angular/forms';
+import { Post } from '../../post.model';
 
 @Component({
   selector: 'app-post-edit',
@@ -16,10 +17,12 @@ export class PostEditComponent implements OnChanges {
 
   @Input() titleFeildValue = '';
   @Input() descriptionFeildValue = '';
+  @Input() postPerPAge: number = 5;
+  @Input() CurrentPAge: number = 1;
   @Input() imagepathValue = '';
-  @Output() CancleBtnclicked = new EventEmitter();
+  @Output() CancleBtnclicked = new EventEmitter<void>();
   @Input() postId = '';
-  @Output() getUpdatedPost = new EventEmitter();
+  @Output() getUpdatedPost = new EventEmitter<{ posts: Post[], totalPosts: number }>();
 
   reactiveForm = this.postUtilityService.createPostForm({
     title: this.titleFeildValue,
@@ -59,10 +62,13 @@ export class PostEditComponent implements OnChanges {
 
       this.postService.updatePost(this.postId, title, description, this.imageFile).subscribe({
         next: () => {
-          this.postService.getPosts().subscribe({
-            next: (value) => {
-              this.getUpdatedPost.emit(value);
-             this.cancleClicked()
+          this.postService.getPosts(this.postPerPAge, this.CurrentPAge).subscribe({
+            next: (postData) => {
+              this.getUpdatedPost.emit(postData);
+              this.cancleClicked();
+            },
+            error: (error) => {
+              console.error('Error fetching updated posts:', error);
             }
           });
         },

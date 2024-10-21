@@ -71,10 +71,28 @@ const updatePost = (req, res) => {
    });
 }
 const getAllPosts = (req, res) => {
-   Post.find().then((documents) => {
-      res.status(200).json(documents)
-   })
+   const pageSize = Number(req.query.pagesize);
+   const currentPage = Number(req.query.page);
+   let fetchedPosts;
+   const postQuery = Post.find();
 
+   if (pageSize && currentPage) {
+      postQuery.skip(pageSize * (currentPage - 1)).limit(pageSize);
+   }
+
+   postQuery.then((documents) => {
+      fetchedPosts = documents;
+      return Post.countDocuments();
+   }).then(count => {
+      res.status(200).json({
+         posts: fetchedPosts,
+         totalPosts: count
+      });
+   }).catch(error => {
+      res.status(500).json({
+         message: "Fetching posts failed!"
+      });
+   });
 }
 const createNewPost = (req, res) => {
    const url=req.protocol+'://'+req.get('host')
@@ -106,6 +124,7 @@ const createNewPost = (req, res) => {
 
 
 app.route('/api/posts/:id').delete(deletePost).put(multer({ storage: storage }).single('image'), updatePost);
+
 app.route('/api/posts').get(getAllPosts).post(multer({ storage: storage }).single('image'), createNewPost);
 
 module.exports = app;

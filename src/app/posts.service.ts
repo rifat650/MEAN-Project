@@ -1,6 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { map, Observable } from 'rxjs';
+import { Post } from './post.model';
 
 @Injectable({
   providedIn: 'root',
@@ -9,17 +10,24 @@ export class PostsService {
   constructor() { }
   http = inject(HttpClient);
 
-  getPosts(): Observable<any[]> {
-    return this.http.get<any[]>('http://127.0.0.1:3000/api/posts').pipe(map((postsdata) => {
-      return postsdata.map(post => {
-        return {
-          title: post.title,
-          description: post.description,
-          id: post._id,
-          imagePath: post.imagePath
-        }
-      })
-    }));
+  getPosts(postsPerPage: number, currentPage: number): Observable<{ posts: Post[], totalPosts: number }> {
+    const queryParams = `?pagesize=${postsPerPage}&page=${currentPage}`;
+    return this.http.get<{ posts: any[], totalPosts: number }>('http://127.0.0.1:3000/api/posts' + queryParams)
+      .pipe(
+        map((postData) => {
+          return {
+            posts: postData.posts.map(post => {
+              return {
+                title: post.title,
+                description: post.description,
+                id: post._id,
+                imagePath: post.imagePath,
+              };
+            }),
+            totalPosts: postData.totalPosts
+          };
+        })
+      );
   }
 
   addPost(title: string, description: string, image: File) {

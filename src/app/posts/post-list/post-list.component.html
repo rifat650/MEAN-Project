@@ -24,6 +24,12 @@
 }
 @if (EditingModeOn===true) {
 <app-post-edit [titleFeildValue]="postTitle" [imagepathValue]="imagePath" (CancleBtnclicked)="hideEditPopup()"
-   [descriptionFeildValue]="postDescription" [postId]="postID"
-   (getUpdatedPost)="fetchingUpdatedPost($event)"></app-post-edit>
+   [descriptionFeildValue]="postDescription" [postId]="postID" (getUpdatedPost)="fetchingUpdatedPost($event)"
+   [postPerPAge]="postsPerPage" [CurrentPAge]="currentPage">
+</app-post-edit>
+}
+@if (posts.length > 0) {
+<mat-paginator [length]="totalPosts" [pageSize]="postsPerPage" [pageSizeOptions]="pageSizeOptions"
+   (page)="onPageChange($event)">
+</mat-paginator>
 }
